@@ -161,10 +161,11 @@ export const ICONS = [
  * @param {Object} settings
  */
 function addAttributes( settings ) {
+	
 	if ( 'core/button' !== settings.name ) {
 		return settings;
 	}
-
+	
 	// Add the block visibility attributes.
 	const iconAttributes = {
 		icon: {
@@ -186,6 +187,12 @@ function addAttributes( settings ) {
 			...settings.attributes,
 			...iconAttributes,
 		},
+		supports: {
+			...settings?.supports,
+			spacing: {
+				blockGap: true
+			}
+		}
 	};
 
 	return newSettings;
@@ -205,10 +212,14 @@ addFilter(
  */
 function addInspectorControls( BlockEdit ) {
 	return ( props ) => {
+		// if ( props.name === 'core/button' || props.name === 'core/buttons' ) {
+		// 	console.log( props );
+		// }
+		
 		if ( props.name !== 'core/button' ) {
 			return <BlockEdit { ...props } />;
 		}
-
+		
 		const { attributes, setAttributes } = props;
 		const { icon: currentIcon, iconPositionLeft, justifySpaceBetween } = attributes;
 
@@ -296,10 +307,11 @@ addFilter(
 function addClasses( BlockListBlock ) {
 	return ( props ) => {
 		const { name, attributes } = props;
-
+		
 		if ( 'core/button' !== name || ! attributes?.icon ) {
 			return <BlockListBlock { ...props } />;
 		}
+		// const gapValue = getGapCSSValue( attributes?.style?.spacing?.blockGap ) || '0.5em';
 
 		const classes = classnames( props?.className, {
 			[ `has-icon__${ attributes?.icon }` ]: attributes?.icon,
