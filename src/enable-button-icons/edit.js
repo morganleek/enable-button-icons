@@ -1,3 +1,5 @@
+import './editor.scss';
+
 /**
  * External dependencies
  */
@@ -37,6 +39,8 @@ import {
 	shuffle,
 	wordpress,
 } from '@wordpress/icons';
+
+import SVG from 'react-inlinesvg';
 
 /**
  * All available icons.
@@ -161,11 +165,10 @@ export const ICONS = [
  * @param {Object} settings
  */
 function addAttributes( settings ) {
-	
 	if ( 'core/button' !== settings.name ) {
 		return settings;
 	}
-	
+
 	// Add the block visibility attributes.
 	const iconAttributes = {
 		icon: {
@@ -187,12 +190,6 @@ function addAttributes( settings ) {
 			...settings.attributes,
 			...iconAttributes,
 		},
-		supports: {
-			...settings?.supports,
-			spacing: {
-				blockGap: true
-			}
-		}
 	};
 
 	return newSettings;
@@ -212,81 +209,81 @@ addFilter(
  */
 function addInspectorControls( BlockEdit ) {
 	return ( props ) => {
-		// if ( props.name === 'core/button' || props.name === 'core/buttons' ) {
-		// 	console.log( props );
-		// }
-		
 		if ( props.name !== 'core/button' ) {
 			return <BlockEdit { ...props } />;
 		}
-		
+
 		const { attributes, setAttributes } = props;
 		const { icon: currentIcon, iconPositionLeft, justifySpaceBetween } = attributes;
 
 		return (
 			<>
 				<BlockEdit { ...props } />
-				<InspectorControls>
-					<PanelBody
-						title={ __( 'Icon settings', 'enable-button-icons' ) }
-						className="button-icon-picker"
-						initialOpen={ true }
-					>
-						<PanelRow>
-							<Grid
-								className="button-icon-picker__grid"
-								columns="5"
-								gap="0"
-							>
-								{ ICONS.map( ( icon, index ) => (
-									<Button
-										key={ index }
-										label={ icon?.label }
-										isPressed={ currentIcon === icon.value }
-										className="button-icon-picker__button"
-										onClick={ () =>
-											setAttributes( {
-												// Allow user to disable icons.
-												icon:
-													currentIcon === icon.value
-														? null
-														: icon.value,
-											} )
-										}
-									>
-										{ icon.icon ?? icon.value }
-									</Button>
-								) ) }
-							</Grid>
-						</PanelRow>
-						<PanelRow className="button-icon-picker__settings">
-							<ToggleControl
-								label={ __(
-									'Show icon on left',
-									'enable-button-icons'
-								) }
-								checked={ iconPositionLeft }
-								onChange={ () => {
-									setAttributes( {
-										iconPositionLeft: ! iconPositionLeft,
-									} );
-								} }
-							/>
-							<ToggleControl
-								label={ __(
-									'Justify space between',
-									'enable-button-icons'
-								) }
-								checked={ justifySpaceBetween }
-								onChange={ () => {
-									setAttributes( {
-										justifySpaceBetween: ! justifySpaceBetween,
-									} );
-								} }
-							/>
-						</PanelRow>
-					</PanelBody>
-				</InspectorControls>
+				{ enableButtonIcons.icons && (
+					<InspectorControls>
+						<PanelBody
+							title={ __( 'Icon settings', 'enable-button-icons' ) }
+							className="button-icon-picker"
+							initialOpen={ true }
+						>
+							<PanelRow>
+								<Grid
+									className="button-icon-picker__grid"
+									columns="5"
+									gap="0"
+								>
+									{ enableButtonIcons.icons.map( ( icon, index ) => (
+										<Button
+											key={ index }
+											label={ icon?.label }
+											isPressed={ currentIcon === icon.value }
+											className="button-icon-picker__button"
+											onClick={ () =>
+												setAttributes( {
+													// Allow user to disable icons.
+													icon:
+														currentIcon === icon.value
+															? null
+															: icon.value,
+												} )
+											}
+										>
+											{/* <div dangerouslySetInnerHTML={{__html: icon.icon }} /> */}
+											{/* { icon.icon } */}
+											<SVG src={ icon.icon } />
+										</Button>
+									) ) }
+								</Grid>
+							</PanelRow>
+							<PanelRow className="button-icon-picker__settings">
+								<ToggleControl
+									label={ __(
+										'Show icon on left',
+										'enable-button-icons'
+									) }
+									checked={ iconPositionLeft }
+									onChange={ () => {
+										setAttributes( {
+											iconPositionLeft: ! iconPositionLeft,
+										} );
+									} }
+								/>
+								<ToggleControl
+									label={ __(
+										'Justify space between',
+										'enable-button-icons'
+									) }
+									checked={ justifySpaceBetween }
+									onChange={ () => {
+										setAttributes( {
+											justifySpaceBetween: ! justifySpaceBetween,
+										} );
+									} }
+								/>
+							</PanelRow>
+						</PanelBody>
+					</InspectorControls>
+				) }
 			</>
 		);
 	};
@@ -307,11 +304,10 @@ addFilter(
 function addClasses( BlockListBlock ) {
 	return ( props ) => {
 		const { name, attributes } = props;
-		
+
 		if ( 'core/button' !== name || ! attributes?.icon ) {
 			return <BlockListBlock { ...props } />;
 		}
-		// const gapValue = getGapCSSValue( attributes?.style?.spacing?.blockGap ) || '0.5em';
 
 		const classes = classnames( props?.className, {
 			[ `has-icon__${ attributes?.icon }` ]: attributes?.icon,

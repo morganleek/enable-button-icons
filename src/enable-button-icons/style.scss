@@ -1,0 +1,34 @@
+.wp-block-button[class*=has-icon__] {
+	.wp-block-button__link {
+		display: flex;
+		gap: 0.5em;
+		align-items: center;
+
+		span {
+			line-height: 0;
+		}
+
+		svg {
+			color: currentColor;
+			fill: currentColor;
+		}
+
+		&.has-text-align-center {
+			justify-content: center;
+		}
+
+		&.has-text-align-right {
+			justify-content: flex-end;
+		}
+
+		&.has-text-align-left {
+			justify-content: flex-start;
+		}
+	}
+
+	&.has-justified-space-between {
+		.wp-block-button__link {
+			justify-content: space-between;
+		}
+	}
+}
