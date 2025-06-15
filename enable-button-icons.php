@@ -38,15 +38,6 @@ function create_block_enable_button_icons_block_init() {
 }
 add_action( 'init', 'create_block_enable_button_icons_block_init' );
 
-// Can't get frontend styles to load so this is a stop-gap
-function create_block_enable_button_icons_block_second_init() {
-	$manifest_data = require __DIR__ . '/build/blocks-manifest.php';
-	foreach ( array_keys( $manifest_data ) as $block_type ) {
-		wp_enqueue_style( "$block_type-frontend", plugin_dir_url( __FILE__ ) . "/build/$block_type/style-index.css", [], '1.0' );
-	}
-}
-add_action( 'init', 'create_block_enable_button_icons_block_second_init' );
-
 function enable_button_icons_icons() {
 	$icons = [
 		[
@@ -237,23 +228,32 @@ function enable_button_icons_render_block_button( $block_content, $block ) {
 add_filter( 'render_block_core/button', 'enable_button_icons_render_block_button', 10, 2 );
 
 function enable_button_icons_admin_scripts() {
-	$icons = enable_button_icons_icons();
-	// Load icons for Inspector Controls
-	wp_localize_script( 'create-block-enable-button-icons-editor-script', 'enableButtonIcons', [ 'icons' => $icons ] );
-	// Load icons for Editor
-	$icon_styles = "";
-	foreach( $icons as $i ) {
-		$icon_styles .= "
-			.wp-block-button[class*=has-icon__].has-icon__{$i['value']} .wp-block-button__link::after,
-			.wp-block-button[class*=has-icon__].has-icon__{$i['value']} .wp-block-button__link::before {
-				width: {$i['width']}px;
-				height: {$i['height']}px;
-				mask-image: url(\"data:image/svg+xml;utf8,{$i['icon']}\");
-			}
-		";
+	if( is_admin() ) {
+		$icons = enable_button_icons_icons();
+		// Load icons for Inspector Controls
+		wp_localize_script( 'create-block-enable-button-icons-editor-script', 'enableButtonIcons', [ 'icons' => $icons ] );
+		// Load icons for Editor
+		$icon_styles = "";
+		foreach( $icons as $i ) {
+			$icon_styles .= "
+				.wp-block-button[class*=has-icon__].has-icon__{$i['value']} .wp-block-button__link::after,
+				.wp-block-button[class*=has-icon__].has-icon__{$i['value']} .wp-block-button__link::before {
+					width: {$i['width']}px;
+					height: {$i['height']}px;
+					mask-image: url(\"data:image/svg+xml;utf8,{$i['icon']}\");
+				}
+			";
+		}
+	
+		// error_log( $icon_styles, 0 );
+		wp_add_inline_style( 'create-block-enable-button-icons-editor-style', $icon_styles );
 	}
-
-	// error_log( $icon_styles, 0 );
-	wp_add_inline_style( 'create-block-enable-button-icons-editor-style', $icon_styles );
+	else {
+		// frontend
+		$manifest_data = require __DIR__ . '/build/blocks-manifest.php';
+		foreach ( array_keys( $manifest_data ) as $block_type ) {
+			wp_enqueue_style( "$block_type-frontend", plugin_dir_url( __FILE__ ) . "/build/$block_type/style-index.css", [], '1.0' );
+		}
+	}
 }
-add_action( 'admin_enqueue_scripts', 'enable_button_icons_admin_scripts' );
+add_action( 'enqueue_block_assets', 'enable_button_icons_admin_scripts' );

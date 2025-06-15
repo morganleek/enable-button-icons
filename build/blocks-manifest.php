@@ -9,7 +9,7 @@ return array(
 		'title' => 'Enable Button Icons',
 		'category' => 'widgets',
 		'icon' => 'smiley',
-		'description' => 'Example block scaffolded with Create Block tool.',
+		'description' => '',
 		'example' => array(
 			
 		),

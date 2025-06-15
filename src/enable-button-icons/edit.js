@@ -190,6 +190,7 @@ function addAttributes( settings ) {
 			...settings.attributes,
 			...iconAttributes,
 		},
+		// style: "file:./style-index.css"
 	};
 
 	return newSettings;
