@@ -1,8 +1,8 @@
 {
 	"name": "enable-button-icons",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "description": "Easily add icons to Button blocks.",
-  "author": "Nick Diego",
+  "author": "Nick Diego & Morgan Leek",
   "license": "GPL-2.0-or-later",
   "repository": {
     "type": "git",
