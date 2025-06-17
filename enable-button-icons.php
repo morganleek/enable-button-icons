@@ -186,6 +186,7 @@ function enable_button_icons_icons() {
 }
 
 function enable_button_icons_render_block_button( $block_content, $block ) {
+	
 	if ( ! isset( $block['attrs']['icon'] ) ) {
 		return $block_content;
 	}
@@ -193,7 +194,7 @@ function enable_button_icons_render_block_button( $block_content, $block ) {
 	$icon                = $block['attrs']['icon'];
 	$positionLeft        = isset( $block['attrs']['iconPositionLeft'] ) ? $block['attrs']['iconPositionLeft'] : false;
 	$justifySpaceBetween = isset( $block['attrs']['justifySpaceBetween'] ) ? $block['attrs']['justifySpaceBetween'] : false;
-	
+
 	// All available icon SVGs.
 	$icons_obj = enable_button_icons_icons();
 
@@ -218,14 +219,22 @@ function enable_button_icons_render_block_button( $block_content, $block ) {
 	}
 	$block_content = $p->get_updated_html();
 
-	// Add the SVG icon either to the left of right of the button text.
-	$block_content = $positionLeft 
-		? preg_replace( '/(<a[^>]*>)(.*?)(<\/a>)/i', '$1<span class="wp-block-button__link-icon" aria-hidden="true">' . $icons[ $icon ] . '</span>$2$3', $block_content )
-		: preg_replace( '/(<a[^>]*>)(.*?)(<\/a>)/i', '$1$2<span class="wp-block-button__link-icon" aria-hidden="true">' . $icons[ $icon ] . '</span>$3', $block_content );
-
+	if( $block['blockName'] === "core/button" ) {
+		// Add the SVG icon either to the left of right of the button text.
+		$block_content = $positionLeft 
+			? preg_replace( '/(<a[^>]*>)(.*?)(<\/a>)/i', '$1<span class="wp-block-button__link-icon" aria-hidden="true">' . $icons[ $icon ] . '</span>$2$3', $block_content )
+			: preg_replace( '/(<a[^>]*>)(.*?)(<\/a>)/i', '$1$2<span class="wp-block-button__link-icon" aria-hidden="true">' . $icons[ $icon ] . '</span>$3', $block_content );
+	}
+	else if( $block['blockName'] === "woocommerce/product-button" ) {
+		$block_content = $positionLeft 
+			? preg_replace( '/(<span[^>]*>)(.*?)(<\/span>)/i', '<span class="wp-block-button__link-icon" aria-hidden="true">' . $icons[ $icon ] . '</span>$1$2$3', $block_content )
+			: preg_replace( '/(<span[^>]*>)(.*?)(<\/span>)/i', '$1$2$3<span class="wp-block-button__link-icon" aria-hidden="true">' . $icons[ $icon ] . '</span>', $block_content );
+	}
+	
 	return $block_content;
 }
 add_filter( 'render_block_core/button', 'enable_button_icons_render_block_button', 10, 2 );
+add_filter( 'render_block_woocommerce/product-button', 'enable_button_icons_render_block_button', 10, 2 );
 
 function enable_button_icons_admin_scripts() {
 	if( is_admin() ) {
@@ -236,6 +245,8 @@ function enable_button_icons_admin_scripts() {
 		$icon_styles = "";
 		foreach( $icons as $i ) {
 			$icon_styles .= "
+				.wp-block-woocommerce-product-button[class*=has-icon__].has-icon__{$i['value']} .wp-block-button__link::after,
+				.wp-block-woocommerce-product-button[class*=has-icon__].has-icon__{$i['value']} .wp-block-button__link::before,
 				.wp-block-button[class*=has-icon__].has-icon__{$i['value']} .wp-block-button__link::after,
 				.wp-block-button[class*=has-icon__].has-icon__{$i['value']} .wp-block-button__link::before {
 					width: {$i['width']}px;
