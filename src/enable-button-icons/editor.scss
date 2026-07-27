@@ -46,6 +46,13 @@
 		border-radius: 2px;
 		padding: 2px;
 		width: 100%;
+		opacity: 0.5;
+		.components-button {
+			svg {
+				max-width: 24px;
+				max-height: 24px;
+			}
+		}
 	}
 
 	.button-icon-picker__settings {

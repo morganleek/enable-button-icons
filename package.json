@@ -1,13 +1,13 @@
 {
 	"name": "enable-button-icons",
-  "version": "0.2.1",
-  "description": "Easily add icons to Button blocks.",
-  "author": "Nick Diego & Morgan Leek",
-  "license": "GPL-2.0-or-later",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/ndiego/enable-button-icons.git"
-  },
+	"version": "0.2.1",
+	"description": "Easily add icons to Button blocks.",
+	"author": "Nick Diego & Morgan Leek",
+	"license": "GPL-2.0-or-later",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/ndiego/enable-button-icons.git"
+	},
 	"main": "build/index.js",
 	"scripts": {
 		"build": "wp-scripts build --blocks-manifest",
@@ -19,8 +19,8 @@
 		"start": "wp-scripts start --blocks-manifest"
 	},
 	"devDependencies": {
-		"@wordpress/icons": "^10.25.0",
-		"@wordpress/scripts": "^30.18.0",
+		"@wordpress/icons": "^15.2.0",
+		"@wordpress/scripts": "^33.0.0",
 		"classnames": "^2.5.1"
 	},
 	"dependencies": {
