@@ -201,6 +201,7 @@ function enable_button_icons_render_block_button( $block_content, $block ) {
 	$icon                = $block['attrs']['icon'];
 	$positionLeft        = isset( $block['attrs']['iconPositionLeft'] ) ? $block['attrs']['iconPositionLeft'] : false;
 	$justifySpaceBetween = isset( $block['attrs']['justifySpaceBetween'] ) ? $block['attrs']['justifySpaceBetween'] : false;
+	$iconColor           = isset( $block['attrs']['iconColor'] ) ? $block['attrs']['iconColor'] : '';
 
 	// All available icon SVGs.
 	$icons_obj = enable_button_icons_icons();
@@ -222,6 +223,11 @@ function enable_button_icons_render_block_button( $block_content, $block ) {
 		$p->add_class( 'has-icon__' . $icon );
 		if ( $justifySpaceBetween ) {
 			$p->add_class( 'has-justified-space-between' );
+		}
+		if ( $iconColor ) {
+			$existing_style = (string) $p->get_attribute( 'style' );
+			$existing_style = $existing_style ? rtrim( trim( $existing_style ), ';' ) . '; ' : '';
+			$p->set_attribute( 'style', $existing_style . '--enable-button-icons-color: ' . esc_attr( $iconColor ) . ';' );
 		}
 	}
 	$block_content = $p->get_updated_html();

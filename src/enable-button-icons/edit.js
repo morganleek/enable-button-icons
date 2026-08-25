@@ -10,7 +10,10 @@ import classnames from 'classnames';
  */
 import { __ } from '@wordpress/i18n';
 import { addFilter } from '@wordpress/hooks';
-import { InspectorControls } from '@wordpress/block-editor';
+import {
+	InspectorControls,
+	PanelColorSettings,
+} from '@wordpress/block-editor';
 import {
 	Button,
 	PanelBody,
@@ -182,6 +185,9 @@ function addAttributes( settings ) {
 			type: 'boolean',
 			default: false,
 		},
+		iconColor: {
+			type: 'string',
+		},
 	};
 
 	const newSettings = {
@@ -215,7 +221,7 @@ function addInspectorControls( BlockEdit ) {
 		}
 
 		const { attributes, setAttributes } = props;
-		const { icon: currentIcon, iconPositionLeft, justifySpaceBetween } = attributes;
+		const { icon: currentIcon, iconPositionLeft, justifySpaceBetween, iconColor } = attributes;
 
 		return (
 			<>
@@ -283,6 +289,18 @@ function addInspectorControls( BlockEdit ) {
 								/>
 							</PanelRow>
 						</PanelBody>
+						<PanelColorSettings
+							title=""
+							initialOpen={ false }
+							colorSettings={ [
+								{
+									value: iconColor,
+									onChange: ( value ) =>
+										setAttributes( { iconColor: value } ),
+									label: __( 'Icon color', 'enable-button-icons' ),
+								},
+							] }
+						/>
 					</InspectorControls>
 				) }
 			</>
@@ -316,7 +334,17 @@ function addClasses( BlockListBlock ) {
 			'has-justified-space-between': attributes?.justifySpaceBetween,
 		} );
 
-		return <BlockListBlock { ...props } className={ classes } />;
+		const style = attributes?.iconColor
+			? { ...props?.wrapperProps?.style, '--enable-button-icons-color': attributes.iconColor }
+			: props?.wrapperProps?.style;
+
+		return (
+			<BlockListBlock
+				{ ...props }
+				className={ classes }
+				wrapperProps={ { ...props?.wrapperProps, style } }
+			/>
+		);
 	};
 }
 
