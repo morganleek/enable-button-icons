@@ -185,6 +185,10 @@ function addAttributes( settings ) {
 			type: 'boolean',
 			default: false,
 		},
+		hideLabel: {
+			type: 'boolean',
+			default: false,
+		},
 		iconColor: {
 			type: 'string',
 		},
@@ -221,7 +225,7 @@ function addInspectorControls( BlockEdit ) {
 		}
 
 		const { attributes, setAttributes } = props;
-		const { icon: currentIcon, iconPositionLeft, justifySpaceBetween, iconColor } = attributes;
+		const { icon: currentIcon, iconPositionLeft, justifySpaceBetween, hideLabel, iconColor } = attributes;
 
 		return (
 			<>
@@ -287,6 +291,23 @@ function addInspectorControls( BlockEdit ) {
 										} );
 									} }
 								/>
+								<ToggleControl
+									label={ __(
+										'Hide button label',
+										'enable-button-icons'
+									) }
+									help={ __(
+										'Visually hide the label, keeping it accessible to screen readers.',
+										'enable-button-icons'
+									) }
+									checked={ hideLabel }
+									disabled={ ! currentIcon }
+									onChange={ () => {
+										setAttributes( {
+											hideLabel: ! hideLabel,
+										} );
+									} }
+								/>
 							</PanelRow>
 						</PanelBody>
 						<PanelColorSettings
@@ -332,6 +353,7 @@ function addClasses( BlockListBlock ) {
 			[ `has-icon__${ attributes?.icon }` ]: attributes?.icon,
 			'has-icon-position__left': attributes?.iconPositionLeft,
 			'has-justified-space-between': attributes?.justifySpaceBetween,
+			'has-hidden-label': attributes?.hideLabel,
 		} );
 
 		const style = attributes?.iconColor

@@ -201,6 +201,7 @@ function enable_button_icons_render_block_button( $block_content, $block ) {
 	$icon                = $block['attrs']['icon'];
 	$positionLeft        = isset( $block['attrs']['iconPositionLeft'] ) ? $block['attrs']['iconPositionLeft'] : false;
 	$justifySpaceBetween = isset( $block['attrs']['justifySpaceBetween'] ) ? $block['attrs']['justifySpaceBetween'] : false;
+	$hideLabel           = isset( $block['attrs']['hideLabel'] ) ? $block['attrs']['hideLabel'] : false;
 	$iconColor           = isset( $block['attrs']['iconColor'] ) ? $block['attrs']['iconColor'] : '';
 
 	// All available icon SVGs.
@@ -224,6 +225,9 @@ function enable_button_icons_render_block_button( $block_content, $block ) {
 		if ( $justifySpaceBetween ) {
 			$p->add_class( 'has-justified-space-between' );
 		}
+		if ( $hideLabel ) {
+			$p->add_class( 'has-hidden-label' );
+		}
 		if ( $iconColor ) {
 			$existing_style = (string) $p->get_attribute( 'style' );
 			$existing_style = $existing_style ? rtrim( trim( $existing_style ), ';' ) . '; ' : '';
@@ -232,16 +236,20 @@ function enable_button_icons_render_block_button( $block_content, $block ) {
 	}
 	$block_content = $p->get_updated_html();
 
+	// When the label is hidden, wrap it in a screen-reader-text span so it remains accessible.
+	$label_open  = $hideLabel ? '<span class="wp-block-button__link-label screen-reader-text">' : '';
+	$label_close = $hideLabel ? '</span>' : '';
+
 	if( $block['blockName'] === "core/button" ) {
 		// Add the SVG icon either to the left of right of the button text.
-		$block_content = $positionLeft 
-			? preg_replace( '/(<a[^>]*>)(.*?)(<\/a>)/i', '$1<span class="wp-block-button__link-icon" aria-hidden="true">' . $icons[ $icon ] . '</span>$2$3', $block_content )
-			: preg_replace( '/(<a[^>]*>)(.*?)(<\/a>)/i', '$1$2<span class="wp-block-button__link-icon" aria-hidden="true">' . $icons[ $icon ] . '</span>$3', $block_content );
+		$block_content = $positionLeft
+			? preg_replace( '/(<a[^>]*>)(.*?)(<\/a>)/i', '$1<span class="wp-block-button__link-icon" aria-hidden="true">' . $icons[ $icon ] . '</span>' . $label_open . '$2' . $label_close . '$3', $block_content )
+			: preg_replace( '/(<a[^>]*>)(.*?)(<\/a>)/i', '$1' . $label_open . '$2' . $label_close . '<span class="wp-block-button__link-icon" aria-hidden="true">' . $icons[ $icon ] . '</span>$3', $block_content );
 	}
 	else if( $block['blockName'] === "woocommerce/product-button" ) {
-		$block_content = $positionLeft 
-			? preg_replace( '/(<span[^>]*>)(.*?)(<\/span>)/i', '<span class="wp-block-button__link-icon" aria-hidden="true">' . $icons[ $icon ] . '</span>$1$2$3', $block_content )
-			: preg_replace( '/(<span[^>]*>)(.*?)(<\/span>)/i', '$1$2$3<span class="wp-block-button__link-icon" aria-hidden="true">' . $icons[ $icon ] . '</span>', $block_content );
+		$block_content = $positionLeft
+			? preg_replace( '/(<span[^>]*>)(.*?)(<\/span>)/i', '<span class="wp-block-button__link-icon" aria-hidden="true">' . $icons[ $icon ] . '</span>$1' . $label_open . '$2' . $label_close . '$3', $block_content )
+			: preg_replace( '/(<span[^>]*>)(.*?)(<\/span>)/i', '$1' . $label_open . '$2' . $label_close . '$3<span class="wp-block-button__link-icon" aria-hidden="true">' . $icons[ $icon ] . '</span>', $block_content );
 	}
 	
 	return $block_content;
