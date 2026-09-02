@@ -360,6 +360,8 @@ function addClasses( BlockListBlock ) {
 
 		const classes = classnames( props?.className, {
 			[ `has-icon__${ attributes?.icon }` ]: attributes?.icon,
+			[ `has-icon-color` ]: attributes?.iconColor,
+			[ `has-icon-background-color` ]: attributes?.iconBackgroundColor,
 			'has-icon-position__left': attributes?.iconPositionLeft,
 			'has-justified-space-between': attributes?.justifySpaceBetween,
 			'has-hidden-label': attributes?.hideLabel,

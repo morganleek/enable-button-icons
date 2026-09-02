@@ -230,11 +230,13 @@ function enable_button_icons_render_block_button( $block_content, $block ) {
 			$p->add_class( 'has-hidden-label' );
 		}
 		if ( $iconColor ) {
+			$p->add_class( 'has-icon-color' );
 			$existing_style = (string) $p->get_attribute( 'style' );
 			$existing_style = $existing_style ? rtrim( trim( $existing_style ), ';' ) . '; ' : '';
 			$p->set_attribute( 'style', $existing_style . '--enable-button-icons-color: ' . esc_attr( $iconColor ) . ';' );
 		}
 		if ( $iconBackgroundColor ) {
+			$p->add_class( 'has-icon-background-color' );
 			$existing_style = (string) $p->get_attribute( 'style' );
 			$existing_style = $existing_style ? rtrim( trim( $existing_style ), ';' ) . '; ' : '';
 			$p->set_attribute( 'style', $existing_style . '--enable-button-icons-background-color: ' . esc_attr( $iconBackgroundColor ) . ';' );
