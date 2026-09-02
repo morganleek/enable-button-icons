@@ -241,6 +241,8 @@ function enable_button_icons_render_block_button( $block_content, $block ) {
 			$existing_style = $existing_style ? rtrim( trim( $existing_style ), ';' ) . '; ' : '';
 			$p->set_attribute( 'style', $existing_style . '--enable-button-icons-background-color: ' . esc_attr( $iconBackgroundColor ) . ';' );
 		}
+		$p->add_class( $positionLeft ? 'has-icon-position-left' : 'has-icon-position-right' );
+		
 	}
 	$block_content = $p->get_updated_html();
 
