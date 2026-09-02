@@ -203,6 +203,7 @@ function enable_button_icons_render_block_button( $block_content, $block ) {
 	$justifySpaceBetween = isset( $block['attrs']['justifySpaceBetween'] ) ? $block['attrs']['justifySpaceBetween'] : false;
 	$hideLabel           = isset( $block['attrs']['hideLabel'] ) ? $block['attrs']['hideLabel'] : false;
 	$iconColor           = isset( $block['attrs']['iconColor'] ) ? $block['attrs']['iconColor'] : '';
+	$iconBackgroundColor = isset( $block['attrs']['iconBackgroundColor'] ) ? $block['attrs']['iconBackgroundColor'] : '';
 
 	// All available icon SVGs.
 	$icons_obj = enable_button_icons_icons();
@@ -232,6 +233,11 @@ function enable_button_icons_render_block_button( $block_content, $block ) {
 			$existing_style = (string) $p->get_attribute( 'style' );
 			$existing_style = $existing_style ? rtrim( trim( $existing_style ), ';' ) . '; ' : '';
 			$p->set_attribute( 'style', $existing_style . '--enable-button-icons-color: ' . esc_attr( $iconColor ) . ';' );
+		}
+		if ( $iconBackgroundColor ) {
+			$existing_style = (string) $p->get_attribute( 'style' );
+			$existing_style = $existing_style ? rtrim( trim( $existing_style ), ';' ) . '; ' : '';
+			$p->set_attribute( 'style', $existing_style . '--enable-button-icons-background-color: ' . esc_attr( $iconBackgroundColor ) . ';' );
 		}
 	}
 	$block_content = $p->get_updated_html();

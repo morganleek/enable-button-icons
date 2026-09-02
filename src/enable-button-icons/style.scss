@@ -9,6 +9,18 @@
       line-height: 0;
     }
 
+    .wp-block-button__link-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.2em;
+      border-radius: 999px;
+      background-color: var(
+        --enable-button-icons-background-color,
+        transparent
+      );
+    }
+
     svg {
       color: var(--enable-button-icons-color, currentColor);
       fill: var(--enable-button-icons-color, currentColor);

@@ -192,6 +192,9 @@ function addAttributes( settings ) {
 		iconColor: {
 			type: 'string',
 		},
+		iconBackgroundColor: {
+			type: 'string',
+		},
 	};
 
 	const newSettings = {
@@ -225,7 +228,7 @@ function addInspectorControls( BlockEdit ) {
 		}
 
 		const { attributes, setAttributes } = props;
-		const { icon: currentIcon, iconPositionLeft, justifySpaceBetween, hideLabel, iconColor } = attributes;
+		const { icon: currentIcon, iconPositionLeft, justifySpaceBetween, hideLabel, iconColor, iconBackgroundColor } = attributes;
 
 		return (
 			<>
@@ -311,14 +314,20 @@ function addInspectorControls( BlockEdit ) {
 							</PanelRow>
 						</PanelBody>
 						<PanelColorSettings
-							title=""
+							title="Icon colors"
 							initialOpen={ false }
 							colorSettings={ [
 								{
 									value: iconColor,
 									onChange: ( value ) =>
 										setAttributes( { iconColor: value } ),
-									label: __( 'Icon color', 'enable-button-icons' ),
+									label: __( 'Icon', 'enable-button-icons' ),
+								},
+								{
+									value: iconBackgroundColor,
+									onChange: ( value ) =>
+										setAttributes( { iconBackgroundColor: value } ),
+									label: __( 'Background', 'enable-button-icons' ),
 								},
 							] }
 						/>
@@ -356,9 +365,13 @@ function addClasses( BlockListBlock ) {
 			'has-hidden-label': attributes?.hideLabel,
 		} );
 
-		const style = attributes?.iconColor
-			? { ...props?.wrapperProps?.style, '--enable-button-icons-color': attributes.iconColor }
-			: props?.wrapperProps?.style;
+		let style = props?.wrapperProps?.style;
+		if ( attributes?.iconColor ) {
+			style = { ...style, '--enable-button-icons-color': attributes.iconColor };
+		}
+		if ( attributes?.iconBackgroundColor ) {
+			style = { ...style, '--enable-button-icons-background-color': attributes.iconBackgroundColor };
+		}
 
 		return (
 			<BlockListBlock
