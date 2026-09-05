@@ -33,6 +33,35 @@
   }
 }
 
+.wp-block-read-more[class*="has-icon__"] {
+  &::after {
+    content: "";
+  }
+
+  // Styles the icon.
+  &::after,
+  &::before {
+    display: inline-block;
+    background-color: var(--enable-button-icons-color, currentColor);
+    mask-size: contain;
+    mask-position: center;
+    mask-repeat: no-repeat;
+    height: 0.8em;
+    width: 0.45em;
+    mask-image: var(--enable--button--icons--chevron_right);
+  }
+
+  &.has-icon-position__left {
+    &::after {
+      content: none;
+    }
+
+    &::before {
+      content: "";
+    }
+  }
+}
+
 // Style "Icon Settings" panel.
 .button-icon-picker {
   .components-panel__row {

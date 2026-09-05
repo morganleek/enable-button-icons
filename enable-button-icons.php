@@ -193,7 +193,6 @@ function enable_button_icons_icons() {
 }
 
 function enable_button_icons_render_block_button( $block_content, $block ) {
-	
 	if ( ! isset( $block['attrs']['icon'] ) ) {
 		return $block_content;
 	}
@@ -261,10 +260,16 @@ function enable_button_icons_render_block_button( $block_content, $block ) {
 			? preg_replace( '/(<span[^>]*>)(.*?)(<\/span>)/i', '<span class="wp-block-button__link-icon" aria-hidden="true">' . $icons[ $icon ] . '</span>$1' . $label_open . '$2' . $label_close . '$3', $block_content )
 			: preg_replace( '/(<span[^>]*>)(.*?)(<\/span>)/i', '$1' . $label_open . '$2' . $label_close . '$3<span class="wp-block-button__link-icon" aria-hidden="true">' . $icons[ $icon ] . '</span>', $block_content );
 	}
+	else if( $block['blockName'] === "core/read-more" ) {
+		$block_content = $positionLeft
+			? preg_replace( '/(<a\b[^>]*>)(.*?)(<\/a>)/is', '$1<span class="wp-block-button__link-icon" aria-hidden="true">' . $icons[ $icon ] . '</span>' . $label_open . '$2' . $label_close . '$3', $block_content )
+			: preg_replace( '/(<a\b[^>]*>)(.*?)(<\/a>)/is', '$1' . $label_open . '$2' . $label_close . '<span class="wp-block-button__link-icon" aria-hidden="true">' . $icons[ $icon ] . '</span>$3', $block_content );
+	}
 	
 	return $block_content;
 }
 add_filter( 'render_block_core/button', 'enable_button_icons_render_block_button', 10, 2 );
+add_filter( 'render_block_core/read-more', 'enable_button_icons_render_block_button', 10, 2 );
 add_filter( 'render_block_woocommerce/product-button', 'enable_button_icons_render_block_button', 10, 2 );
 
 function enable_button_icons_admin_scripts() {
@@ -279,7 +284,9 @@ function enable_button_icons_admin_scripts() {
 				.wp-block-woocommerce-product-button[class*=has-icon__].has-icon__{$i['value']} .wp-block-button__link::after,
 				.wp-block-woocommerce-product-button[class*=has-icon__].has-icon__{$i['value']} .wp-block-button__link::before,
 				.wp-block-button[class*=has-icon__].has-icon__{$i['value']} .wp-block-button__link::after,
-				.wp-block-button[class*=has-icon__].has-icon__{$i['value']} .wp-block-button__link::before {
+				.wp-block-button[class*=has-icon__].has-icon__{$i['value']} .wp-block-button__link::before,
+				.wp-block-read-more[class*=has-icon__].has-icon__{$i['value']}::after,
+				.wp-block-read-more[class*=has-icon__].has-icon__{$i['value']}::before {
 					width: {$i['width']}px;
 					height: {$i['height']}px;
 					mask-image: url(\"data:image/svg+xml;utf8,{$i['icon']}\");
@@ -287,7 +294,6 @@ function enable_button_icons_admin_scripts() {
 			";
 		}
 	
-		// error_log( $icon_styles, 0 );
 		wp_add_inline_style( 'create-block-enable-button-icons-editor-style', $icon_styles );
 	}
 	else {

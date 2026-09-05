@@ -168,7 +168,11 @@ export const ICONS = [
  * @param {Object} settings
  */
 function addAttributes( settings ) {
-	if ( 'core/button' !== settings.name && 'woocommerce/product-button' !== settings.name ) {
+	if ( 
+		'core/button' !== settings.name && 
+		'core/read-more' !== settings.name && 
+		'woocommerce/product-button' !== settings.name 
+	) {
 		return settings;
 	}
 
@@ -223,7 +227,10 @@ addFilter(
  */
 function addInspectorControls( BlockEdit ) {
 	return ( props ) => {
-		if ( props.name !== 'core/button' && props.name !== 'woocommerce/product-button' ) {
+		if ( 
+			props.name !== 'core/button' && 
+			props.name !== 'core/read-more' && 
+			props.name !== 'woocommerce/product-button' ) {
 			return <BlockEdit { ...props } />;
 		}
 
@@ -354,7 +361,11 @@ function addClasses( BlockListBlock ) {
 	return ( props ) => {
 		const { name, attributes } = props;
 
-		if ( ( 'core/button' !== name && 'woocommerce/product-button' !== name ) || ! attributes?.icon ) {
+		if ( ( 
+			'core/button' !== name && 
+			'core/read-more' !== name && 
+			'woocommerce/product-button' !== name 
+		) || ! attributes?.icon ) {
 			return <BlockListBlock { ...props } />;
 		}
 

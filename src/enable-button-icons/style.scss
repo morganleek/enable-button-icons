@@ -1,42 +1,61 @@
+@mixin icon-button-link {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+
+  span {
+    line-height: 0;
+  }
+
+  .wp-block-button__link-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.2em;
+    border-radius: 999px;
+    background-color: var(
+      --enable-button-icons-background-color,
+      transparent
+    );
+  }
+
+  svg {
+    color: var(--enable-button-icons-color, currentColor);
+    fill: var(--enable-button-icons-color, currentColor);
+  }
+
+  &.has-text-align-center {
+    justify-content: center;
+  }
+
+  &.has-text-align-right {
+    justify-content: flex-end;
+  }
+
+  &.has-text-align-left {
+    justify-content: flex-start;
+  }
+}
+
+.wp-block-read-more[class*="has-icon__"] {
+  @include icon-button-link;
+  &.has-justified-space-between {
+    justify-content: space-between;
+  }
+
+  &.has-hidden-label {
+    font-size: 0 !important;
+  }
+
+  .label {
+    display: inline-flex;
+  }
+}
+
 .wp-block-woocommerce-product-button[class*="has-icon__"],
 .wp-block-button[class*="has-icon__"] {
   .wp-block-button__link {
-    display: flex;
-    gap: 0.5em;
-    align-items: center;
-
-    span {
-      line-height: 0;
-    }
-
-    .wp-block-button__link-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0.2em;
-      border-radius: 999px;
-      background-color: var(
-        --enable-button-icons-background-color,
-        transparent
-      );
-    }
-
-    svg {
-      color: var(--enable-button-icons-color, currentColor);
-      fill: var(--enable-button-icons-color, currentColor);
-    }
-
-    &.has-text-align-center {
-      justify-content: center;
-    }
-
-    &.has-text-align-right {
-      justify-content: flex-end;
-    }
-
-    &.has-text-align-left {
-      justify-content: flex-start;
-    }
+    @include icon-button-link;
   }
 
   &.has-justified-space-between {
